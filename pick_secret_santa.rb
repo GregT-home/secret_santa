@@ -35,7 +35,7 @@ def pick_partners()
   list
 end 
 
-dry_run = false
+dry_run = true
 assignments = pick_partners()
 subject = "You are officially a Secret Santa"
 
@@ -45,7 +45,7 @@ assignments.each do |set|
 
         The Magic Selector has selected. You have been chosen to be Secret Santa for #{set[:recipient]}.
 
-        Your giving budget is $125.00
+        Your giving budget is 125.00 dollars.
 
         Have a Merry Christmas--and go make it a Merry Christmas for #{set[:recipient]}!
 
