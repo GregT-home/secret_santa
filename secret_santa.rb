@@ -7,6 +7,9 @@ class Person
   def initialize(name)
     @first_name, @last_name, @email = name
   end
+  def full_name
+    "#{@first_name} #{@last_name}"
+  end
 end
 
 def pick_partner(target, list)
@@ -20,26 +23,38 @@ end
 
 def pick_partners(starting_list)
   list = starting_list
+  return_hash = []
   list.each do |person|
-    if [person] == list  # degenerate case; recurse
+    if degenerate(person, list)
       return pick_partners(starting_list)
     end
 
     partner = pick_partner(person, list)
-    names -= [partner]
-    list << { giver: "#{name}", recipient: "#{partner}", email: "#{emails[i]}" }
+    list -= [partner]
+    return_hash << { giver: "#{person.full_name}", recipient: "#{partner.full_name}", email: "#{person.email}" }
   end
-  list
+  return_hash
+end
+
+def degenerate(person, list)
+  if [person] == list
+    true
+  else
+    feasible = list.reject { |e| e.last_name == person.last_name }
+    return !feasible.any?
+  end
 end
 
 list = []
 
 while line = gets do
   line = line.chomp
-  puts "line: #{line.split}"
   list << Person.new(line.split)
 end
-puts "#{list}"
 
 assignments = pick_partners(list)
-puts "#{assignments}"
+puts "---------------- assignments:\n"
+assignments.each do |assignment|
+  puts "echo '#{assignment[:giver]}, You give your gift to #{assignment[:recipient]}.' #{assignment[:email]} | mail -s 'You are a secret santa!'"
+end
+
